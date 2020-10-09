@@ -19,26 +19,24 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
 /**
- * 项目名称：hupj-pay-sdk
- * 类 名 称：HttpUtil
- * 类 描 述：Http请求工具类
- * 创建时间：2020-07-31 00:21
- * 创 建 人：louis
+ * Http请求工具类
+ *
+ * @author wuhb
  */
 public class HttpUtil {
 
     private static PoolingHttpClientConnectionManager pool;
     private static RequestConfig requestConfig;
 
-    private static int timeout=10000;
+    private static int timeout = 10000;
 
 
     static {
         Registry<ConnectionSocketFactory> socketFactoryRegistry =
                 RegistryBuilder.<ConnectionSocketFactory>create()
                         .register(
-                "http", PlainConnectionSocketFactory.getSocketFactory()).register(
-                "https", SSLConnectionSocketFactory.getSocketFactory()).build();
+                                "http", PlainConnectionSocketFactory.getSocketFactory()).register(
+                        "https", SSLConnectionSocketFactory.getSocketFactory()).build();
 
         pool = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         pool.setMaxTotal(200);
@@ -52,7 +50,7 @@ public class HttpUtil {
 
     }
 
-    public static String httpPost(String url,String param){
+    public static String httpPost(String url, String param) {
         HttpPost httpPost = new HttpPost(url);
         httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
         httpPost.setConfig(requestConfig);
@@ -64,8 +62,7 @@ public class HttpUtil {
     }
 
 
-
-    public static String httpPostWithJson(String httpUrl,String jsonParam){
+    public static String httpPostWithJson(String httpUrl, String jsonParam) {
 
         HttpPost httpPost = new HttpPost(httpUrl);
 
@@ -80,18 +77,18 @@ public class HttpUtil {
         return sendHttpPost(httpPost);
     }
 
-    public static String httpGet(String httpUrl){
+    public static String httpGet(String httpUrl) {
         HttpGet httpGet = new HttpGet(httpUrl);
         httpGet.setConfig(requestConfig);
         return sendHttpGet(httpGet);
     }
 
-    public static String sendHttpPost(HttpPost httpPost){
+    public static String sendHttpPost(HttpPost httpPost) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         String responseContent = null;
 
-        try{
+        try {
             httpClient = getHttpClient();
             httpPost.setConfig(requestConfig);
 
@@ -102,19 +99,19 @@ public class HttpUtil {
             if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
                 responseContent = EntityUtils.toString(entity, "UTF-8");
                 EntityUtils.consume(entity);
-            }else{
+            } else {
                 responseContent = response.getStatusLine().getStatusCode() + " " +
                         response.getStatusLine().getReasonPhrase();
                 throw new RuntimeException(responseContent);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
-            try{
-                if(response!=null){
+        } finally {
+            try {
+                if (response != null) {
                     response.close();
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -122,12 +119,12 @@ public class HttpUtil {
         return responseContent;
     }
 
-    public static String sendHttpGet(HttpGet httpGet){
+    public static String sendHttpGet(HttpGet httpGet) {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         String responseContent = null;
 
-        try{
+        try {
             httpClient = getHttpClient();
             httpGet.setConfig(requestConfig);
 
@@ -140,14 +137,14 @@ public class HttpUtil {
                 EntityUtils.consume(entity);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
-        }finally {
-            try{
-                if(response!=null){
+        } finally {
+            try {
+                if (response != null) {
                     response.close();
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
@@ -155,15 +152,15 @@ public class HttpUtil {
         return responseContent;
     }
 
-    public static CloseableHttpClient getHttpClient(){
+    public static CloseableHttpClient getHttpClient() {
         CloseableHttpClient httpClient = HttpClients.custom()
-            // 设置连接池管理
-            .setConnectionManager(pool)
-            // 设置请求配置
-            .setDefaultRequestConfig(requestConfig)
-            // 设置重试次数
-            .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
-            .build();
+                // 设置连接池管理
+                .setConnectionManager(pool)
+                // 设置请求配置
+                .setDefaultRequestConfig(requestConfig)
+                // 设置重试次数
+                .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
+                .build();
 
         return httpClient;
     }

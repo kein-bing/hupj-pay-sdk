@@ -5,11 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * 项目名称：hupj-pay-sdk
- * 类 名 称：BeanUtil
- * 类 描 述：实体操作工具类
- * 创建时间：2020-07-31 00:21
- * 创 建 人：louis
+ * 实体操作工具类
+ *
+ * @author wuhb
  */
 public class BeanUtil {
 
@@ -40,10 +38,10 @@ public class BeanUtil {
             String strValue = "";
             if (isBaseType(value)) {
                 strValue = baseTypeToString(value);
-            } else if(value instanceof Collection){
+            } else if (value instanceof Collection) {
                 strValue = "[";
-                Collection collection=(Collection)value;
-                for(Object child : collection){
+                Collection collection = (Collection) value;
+                for (Object child : collection) {
                     if (isBaseType(child)) {
                         strValue += child.toString() + ",";
                     } else {
@@ -53,8 +51,7 @@ public class BeanUtil {
                 if (strValue.endsWith(",")) strValue = strValue.substring(0, strValue.length() - 1);
                 strValue += "]";
 
-            }
-            else {
+            } else {
                 strValue = "{" + objectToSignString(value) + "}";
             }
             map.put(k.toString(), strValue);
@@ -99,7 +96,7 @@ public class BeanUtil {
     }
 
     public static String objectToSignString(Object obj) {
-        if(obj==null)return "";
+        if (obj == null) return "";
         if (isBaseType(obj)) return obj.toString();
         Map<String, String> map = objectToMap(obj);
         Set<String> keySet = map.keySet();

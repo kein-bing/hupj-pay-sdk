@@ -2,18 +2,35 @@ package com.xunhu.hupj.pay.sdk.response;
 
 import lombok.Data;
 
+/**
+ * 订单查询返回参数
+ *
+ * @author wuhb
+ */
 @Data
 public class OrderQueryResponse extends BaseResponse {
-    /** 订单id */
+    /**
+     * 订单id
+     */
     String order_id;
-    /** 商户订单号 */
+    /**
+     * 商户订单号
+     */
     String out_trade_no;
-    /** 订单状态 */
+    /**
+     * 订单状态
+     */
     String status;
-    /** 支付完成时间 */
+    /**
+     * 支付完成时间
+     */
     String time_end;
-    /** 订单金额 */
+    /**
+     * 订单金额
+     */
     Integer total_fee;
-    /** 附加数据 */
+    /**
+     * 附加数据
+     */
     String attach;
 }

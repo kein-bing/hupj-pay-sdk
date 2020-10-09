@@ -10,38 +10,36 @@ import com.xunhu.hupj.pay.sdk.utils.HttpUtil;
 import com.xunhu.hupj.pay.sdk.utils.SignUtil;
 
 /**
- * 项目名称：hupj-pay-sdk
- * 类 名 称：DefaultXunhuPayClient
- * 类 描 述：迅虎支付客户端
- * 创建时间：2020-07-30 23:00
- * 创 建 人：louis
+ * 迅虎支付客户端
+ *
+ * @author wuhb
  */
 public class DefaultXunhuPayClient implements XunhuPayClient {
     private String secretKey;
     private String domain;
 
-    public DefaultXunhuPayClient(String secretKey,String domain){
-        this.secretKey=secretKey;
-        this.domain=domain;
+    public DefaultXunhuPayClient(String secretKey, String domain) {
+        this.secretKey = secretKey;
+        this.domain = domain;
     }
 
-    public DefaultXunhuPayClient(String secretKey){
-        this.secretKey=secretKey;
-        this.domain=XunhuPayConstants.DOMAIN;
+    public DefaultXunhuPayClient(String secretKey) {
+        this.secretKey = secretKey;
+        this.domain = XunhuPayConstants.DOMAIN;
     }
 
     @Override
     public PaymentResponse payWithNative(PaymentRequest request) {
         handleParameter(request);
 
-        String url=domain + XunhuPayConstants.URL_SUFFIX_PAYMENT;
+        String url = domain + XunhuPayConstants.URL_SUFFIX_PAYMENT;
 
         String strResponse = HttpUtil.httpPostWithJson(url, JSONObject.toJSONString(request));
 
         // 处理返回数据
-        PaymentResponse response=JSONObject.parseObject(strResponse,PaymentResponse.class);
+        PaymentResponse response = JSONObject.parseObject(strResponse, PaymentResponse.class);
 
-        if(!response.getReturn_code().equals("SUCCESS")){
+        if (!response.getReturn_code().equals("SUCCESS")) {
             throw new RuntimeException(response.getErr_code() + ":" + response.getErr_msg());
         }
 
@@ -52,14 +50,14 @@ public class DefaultXunhuPayClient implements XunhuPayClient {
     public PaymentResponse payWithH5(PaymentRequest request) {
         handleParameter(request);
 
-        String url=domain + XunhuPayConstants.URL_SUFFIX_PAYMENT;
+        String url = domain + XunhuPayConstants.URL_SUFFIX_PAYMENT;
 
         String strResponse = HttpUtil.httpPostWithJson(url, JSONObject.toJSONString(request));
 
         // 处理返回数据
-        PaymentResponse response=JSONObject.parseObject(strResponse,PaymentResponse.class);
+        PaymentResponse response = JSONObject.parseObject(strResponse, PaymentResponse.class);
 
-        if(!response.getReturn_code().equals("SUCCESS")){
+        if (!response.getReturn_code().equals("SUCCESS")) {
             throw new RuntimeException(response.getErr_code() + ":" + response.getErr_msg());
         }
 
@@ -70,14 +68,14 @@ public class DefaultXunhuPayClient implements XunhuPayClient {
     public JsapiResponse payWithJsapi(JsapiRequest request) {
         handleParameter(request);
 
-        String url=domain + XunhuPayConstants.URL_SUFFIX_JSAPI;
+        String url = domain + XunhuPayConstants.URL_SUFFIX_JSAPI;
 
         String strResponse = HttpUtil.httpPostWithJson(url, JSONObject.toJSONString(request));
 
         // 处理返回数据
-        JsapiResponse response=JSONObject.parseObject(strResponse,JsapiResponse.class);
+        JsapiResponse response = JSONObject.parseObject(strResponse, JsapiResponse.class);
 
-        if(!response.getReturn_code().equals("SUCCESS")){
+        if (!response.getReturn_code().equals("SUCCESS")) {
             throw new RuntimeException(response.getErr_code() + ":" + response.getErr_msg());
         }
 
@@ -89,14 +87,14 @@ public class DefaultXunhuPayClient implements XunhuPayClient {
 
         handleParameter(request);
 
-        String url=domain + XunhuPayConstants.URL_SUFFIX_QUERY;
+        String url = domain + XunhuPayConstants.URL_SUFFIX_QUERY;
 
         String strResponse = HttpUtil.httpPostWithJson(url, JSONObject.toJSONString(request));
 
         // 处理返回数据
-        OrderQueryResponse response=JSONObject.parseObject(strResponse,OrderQueryResponse.class);
+        OrderQueryResponse response = JSONObject.parseObject(strResponse, OrderQueryResponse.class);
 
-        if(!response.getReturn_code().equals("SUCCESS")){
+        if (!response.getReturn_code().equals("SUCCESS")) {
             throw new RuntimeException(response.getErr_code() + ":" + response.getErr_msg());
         }
 
@@ -107,24 +105,24 @@ public class DefaultXunhuPayClient implements XunhuPayClient {
     public OrderRefundResponse refund(OrderRefundRequest request) {
         handleParameter(request);
 
-        String url=domain + XunhuPayConstants.URL_SUFFIX_REFUND;
+        String url = domain + XunhuPayConstants.URL_SUFFIX_REFUND;
 
         String strResponse = HttpUtil.httpPostWithJson(url, JSONObject.toJSONString(request));
 
         // 处理返回数据
-        OrderRefundResponse response=JSONObject.parseObject(strResponse,OrderRefundResponse.class);
+        OrderRefundResponse response = JSONObject.parseObject(strResponse, OrderRefundResponse.class);
 
-        if(!response.getReturn_code().equals("SUCCESS")){
+        if (!response.getReturn_code().equals("SUCCESS")) {
             throw new RuntimeException(response.getErr_code() + ":" + response.getErr_msg());
         }
 
         return response;
     }
 
-    private void handleParameter(BaseRequest request){
+    private void handleParameter(BaseRequest request) {
         // 参数校验
-        request.setNonce_str(System.currentTimeMillis()+ "");
-        String sign=SignUtil.generateSignature(request,secretKey);
+        request.setNonce_str(System.currentTimeMillis() + "");
+        String sign = SignUtil.generateSignature(request, secretKey);
         request.setSign(sign);
     }
 

@@ -8,12 +8,12 @@ package com.xunhu.hupj.pay.sdk;
  * 创 建 人：louis
  */
 public class XunhuPayClientBuilder {
-    public static XunhuPayClient create(String secretKey){
+    public static XunhuPayClient create(String secretKey) {
         return new DefaultXunhuPayClient(secretKey);
     }
 
-    public static XunhuPayClient create(String secretKey,String domain){
-        return new DefaultXunhuPayClient(secretKey,domain);
+    public static XunhuPayClient create(String secretKey, String domain) {
+        return new DefaultXunhuPayClient(secretKey, domain);
     }
 
 }

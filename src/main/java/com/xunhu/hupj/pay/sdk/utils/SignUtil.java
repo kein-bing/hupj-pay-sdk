@@ -6,22 +6,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 项目名称：hupj-pay-sdk
- * 类 名 称：SignUtils
- * 类 描 述：签名工具类
- * 创建时间：2020-07-24 10:30
- * 创 建 人：wuhb
+ * 签名工具类
+ *
+ * @author wuhb
  */
 public class SignUtil {
 
-    static final String FIELD_SIGN="sign";
+    static final String FIELD_SIGN = "sign";
 
     /**
-     * 签名请求参数
-     * @param data  签名参数对象：key：参数名；value：参数值
-     * @param key   商户密钥
-     * @return      签名字符串
-     * @throws Exception
+     * 签名Map数据
+     *
+     * @param data 待签名的Map对象：key：参数名；value：参数值
+     * @param key  商户密钥
+     * @return 签名字符串
      */
     public static String generateSignature(Map<String, String> data, String key) {
         // 对参数根据参数名进行排序
@@ -46,57 +44,60 @@ public class SignUtil {
     }
 
     /**
-     * 签名请求参数
-     * @param obj   待签名的对象
-     * @param key   商户密钥
-     * @return      签名字符串
+     * 签名对象数据
+     *
+     * @param obj 待签名的对象
+     * @param key 商户密钥
+     * @return 签名字符串
      */
-    public static String generateSignature(Object obj,String key){
-        String signString= BeanUtil.objectToSignString(obj);
-        String sign = SignUtil.generateSignature(signString,key);
+    public static String generateSignature(Object obj, String key) {
+        String signString = BeanUtil.objectToSignString(obj);
+        String sign = SignUtil.generateSignature(signString, key);
 
         return sign;
     }
 
     /**
-     * 签名请求参数
-     * @param message       待签名的字符串
-     * @param key           商户密钥
-     * @return              签名字符串
+     * 签名字符串数据
+     *
+     * @param message 待签名的字符串
+     * @param key     商户密钥
+     * @return 签名字符串
      */
     public static String generateSignature(String message, String key) {
         // 添加商户密钥
-        message +="key=" + key;
+        message += "key=" + key;
 
         return MD5(message).toUpperCase();
     }
 
     /**
      * 签名校验
-     * @param obj       待校验的数据对象，需包含sign
-     * @param key       商户密钥
+     *
+     * @param obj 待校验的数据对象，需包含sign
+     * @param key 商户密钥
      */
-    public static void signVerification(Object obj,String key){
-        Map<String,String> map=BeanUtil.objectToMap(obj);
+    public static void signVerification(Object obj, String key) {
+        Map<String, String> map = BeanUtil.objectToMap(obj);
 
-        String sign=generateSignature(obj,key);
+        String sign = generateSignature(obj, key);
 
-        if(!map.containsKey(FIELD_SIGN)){
+        if (!map.containsKey(FIELD_SIGN)) {
             throw new RuntimeException("不存在签名数据");
         }
 
-        if(!sign.equals(map.get(FIELD_SIGN))){
+        if (!sign.equals(map.get(FIELD_SIGN))) {
             throw new RuntimeException("签名校验失败");
         }
 
     }
 
-        /**
-         * 对字符串数据进行MD5码生成
-         * @param data
-         * @return MD5码
-         * @throws Exception
-         */
+    /**
+     * 对字符串数据进行MD5码生成
+     *
+     * @param data  待加密的数据
+     * @return MD5值
+     */
     public static String MD5(String data) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -106,8 +107,8 @@ public class SignUtil {
                 sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString().toUpperCase();
-        }catch (Exception e){
-            throw new RuntimeException("MD5生成异常"+ e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("MD5生成异常" + e.getMessage());
         }
     }
 }
